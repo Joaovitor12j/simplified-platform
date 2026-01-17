@@ -17,14 +17,10 @@ class TransferController extends Controller
 {
     public function __construct(
         private readonly TransferServiceInterface $transferService
-    ) {
-    }
+    ) {}
 
     /**
      * Handle the incoming transfer request.
-     *
-     * @param TransferRequest $request
-     * @return JsonResponse
      */
     public function store(TransferRequest $request): JsonResponse
     {
@@ -50,7 +46,7 @@ class TransferController extends Controller
             };
 
             if ($statusCode === Response::HTTP_INTERNAL_SERVER_ERROR) {
-                Log::error('Erro ao processar transferência: ' . $e->getMessage(), [
+                Log::error('Erro ao processar transferência: '.$e->getMessage(), [
                     'exception' => $e,
                 ]);
             }

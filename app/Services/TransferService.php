@@ -20,22 +20,17 @@ use Throwable;
 /**
  * Serviço responsável pelo gerenciamento de transferências de dinheiro entre usuários.
  */
-readonly final class TransferService implements TransferServiceInterface
+final readonly class TransferService implements TransferServiceInterface
 {
     public function __construct(
-        private WalletRepositoryInterface      $walletRepository,
+        private WalletRepositoryInterface $walletRepository,
         private TransactionRepositoryInterface $transactionRepository,
-        private AuthorizationServiceInterface  $authorizationService
-    ) {
-    }
+        private AuthorizationServiceInterface $authorizationService
+    ) {}
 
     /**
      * Executes a transfer between two users.
      *
-     * @param User $payer
-     * @param User $payee
-     * @param string $value
-     * @return Transaction
      *
      * @throws MerchantPayerException
      * @throws InsufficientBalanceException
@@ -47,12 +42,12 @@ readonly final class TransferService implements TransferServiceInterface
         $this->authorizeTransaction();
 
         return DB::transaction(function () use ($payer, $payee, $value) {
-            $payerWallet = $this->walletRepository->findByUserIdForUpdate($payer->id);
-            $payeeWallet = $this->walletRepository->findByUserIdForUpdate($payee->id);
+            $payerWallet = $this->walletRepository->findByUserIdForUpdate((string) $payer->id);
+            $payeeWallet = $this->walletRepository->findByUserIdForUpdate((string) $payee->id);
 
             $this->validateBalance($payerWallet, $value);
 
-            $this->walletRepository->updateBalance($payerWallet->id, '-' . $value);
+            $this->walletRepository->updateBalance($payerWallet->id, '-'.$value);
             $this->walletRepository->updateBalance($payeeWallet->id, $value);
 
             return $this->transactionRepository->create([
@@ -66,14 +61,14 @@ readonly final class TransferService implements TransferServiceInterface
     private function validatePayerType(User $payer): void
     {
         if ($payer->type->isShopkeeper()) {
-            throw new MerchantPayerException();
+            throw new MerchantPayerException;
         }
     }
 
     private function validateBalance(Wallet $wallet, string $value): void
     {
         if (bccomp($wallet->balance, $value, 2) === -1) {
-            throw new InsufficientBalanceException();
+            throw new InsufficientBalanceException;
         }
     }
 

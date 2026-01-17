@@ -20,8 +20,6 @@ class SendNotificationJob implements ShouldQueue
 
     /**
      * O número de vezes que a tarefa pode ser tentada.
-     *
-     * @var int
      */
     public int $tries = 5;
 
@@ -34,8 +32,7 @@ class SendNotificationJob implements ShouldQueue
 
     public function __construct(
         public Transaction $transaction
-    ) {
-    }
+    ) {}
 
     public function handle(): void
     {
@@ -44,7 +41,7 @@ class SendNotificationJob implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        Log::error('Notification failed for transaction ' . $this->transaction->id, [
+        Log::error('Notification failed for transaction '.$this->transaction->id, [
             'error' => $exception->getMessage(),
             'transaction' => $this->transaction->toArray(),
         ]);

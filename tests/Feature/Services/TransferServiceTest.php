@@ -40,9 +40,9 @@ class TransferServiceTest extends TestCase
             'https://util.devi.tools/api/v2/authorize' => Http::response([
                 'status' => 'success',
                 'data' => [
-                    'authorization' => true
-                ]
-            ], 200)
+                    'authorization' => true,
+                ],
+            ]),
         ]);
 
         // WHEN
@@ -51,16 +51,16 @@ class TransferServiceTest extends TestCase
         // THEN
         $this->assertDatabaseHas('wallets', [
             'user_id' => $payer->id,
-            'balance' => 50.00
+            'balance' => 50.00,
         ]);
 
         $this->assertDatabaseHas('wallets', [
             'user_id' => $payee->id,
-            'balance' => 50.00
+            'balance' => 50.00,
         ]);
 
         $this->assertDatabaseHas('transactions', [
-            'amount' => 50.00
+            'amount' => 50.00,
         ]);
     }
 
@@ -89,9 +89,9 @@ class TransferServiceTest extends TestCase
             'https://util.devi.tools/api/v2/authorize' => Http::response([
                 'status' => 'success',
                 'data' => [
-                    'authorization' => true
-                ]
-            ], 200)
+                    'authorization' => true,
+                ],
+            ]),
         ]);
 
         $this->expectException(InsufficientBalanceException::class);
@@ -112,9 +112,9 @@ class TransferServiceTest extends TestCase
             'https://util.devi.tools/api/v2/authorize' => Http::response([
                 'status' => 'fail',
                 'data' => [
-                    'authorization' => false
-                ]
-            ], 200)
+                    'authorization' => false,
+                ],
+            ]),
         ]);
 
         $this->expectException(UnauthorizedTransactionException::class);

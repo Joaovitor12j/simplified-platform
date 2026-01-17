@@ -9,6 +9,8 @@ use App\Models\Wallet;
 interface WalletRepositoryInterface
 {
     public function updateBalance(string $walletId, string $amount): void;
+
     public function findByUserId(string $userId): ?Wallet;
+
     public function findByUserIdForUpdate(string $userId): ?Wallet;
 }

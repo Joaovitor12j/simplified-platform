@@ -1,4 +1,4 @@
-.PHONY: setup up down logs reload monitor bash test migrate tinker queue
+.PHONY: setup up down logs reload monitor bash test migrate tinker queue lint analyse check
 
 setup:
 	@if [ ! -f .env ]; then cp .env.example .env; fi
@@ -37,3 +37,11 @@ tinker:
 
 queue:
 	@docker compose exec app php artisan queue:work
+
+lint:
+	@docker compose exec app ./vendor/bin/pint
+
+analyse:
+	@docker compose exec app ./vendor/bin/phpstan analyse --memory-limit=2G
+
+check: lint analyse test
