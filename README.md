@@ -1,74 +1,127 @@
-# Simplified Platform - Backend
+# Pagamento Simplificado - Desafio Back-end
 
-Este projeto é uma implementação do desafio técnico.
+[![PHP Version](https://img.shields.io/badge/PHP-8.3-777bb4.svg?style=flat-square&logo=php)](https://www.php.net/)
+[![Laravel Version](https://img.shields.io/badge/Laravel-11-ff2d20.svg?style=flat-square&logo=laravel)](https://laravel.com/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ed.svg?style=flat-square&logo=docker)](https://www.docker.com/)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat-square)](#)
 
-## Stack Tecnológica
+## 📌 Sobre o Projeto
 
-- **PHP 8.5**
-- **Laravel 12**
-- **Laravel Octane (Swoole)**
-- **PostgreSQL**
-- **Redis**
-- **Docker & Docker Compose**
+Este projeto é uma implementação de uma API RESTful para a simulação de uma plataforma de pagamentos simplificada. A solução foi projetada com foco em **alta performance**, **consistência de dados** e **escalabilidade**.
 
-## Pré-requisitos
+### Diferenciais de Performance
+- **Laravel Octane com Swoole**: A aplicação utiliza o servidor de alto desempenho Swoole, eliminando o overhead de inicialização do framework a cada requisição e mantendo o estado na memória para respostas ultra-rápidas.
+- **Processamento Assíncrono**: O envio de notificações é delegado para filas gerenciadas pelo **Redis**, garantindo que a resposta ao usuário não seja bloqueada por serviços externos instáveis.
 
-- Docker
-- Docker Compose
+---
 
-## Setup do Projeto
+## 🏗️ Arquitetura e Decisões Técnicas
 
-Siga os passos abaixo para configurar o ambiente de desenvolvimento:
+A arquitetura foi desenhada seguindo os princípios de **Clean Architecture** e **SOLID**, garantindo que a lógica de negócio esteja desacoplada de detalhes de infraestrutura.
 
-1. **Clonar o repositório:**
+- **Stack Tecnológica**: PHP 8.3+, Laravel 11+, Laravel Octane (Swoole), PostgreSQL, Redis e Docker.
+- **Organização de Código**: Implementação de *Services* e *Repositories* para isolar as regras de domínio e abstrair a persistência de dados.
+- **Segurança e Precisão Financeira**:
+    - **UUIDs**: Utilizados como chaves primárias em vez de IDs sequenciais, aumentando a segurança e facilitando a distribuição de dados.
+    - **Tipos Decimais (BCMath)**: Todos os cálculos financeiros são realizados com precisão arbitrária (strings), evitando os erros de arredondamento comuns ao tipo `float`.
+- **Atomicidade e Integridade (ACID)**: Transferências são protegidas por transações de banco de dados (`DB Transactions`), garantindo que a operação seja revertida integralmente em caso de qualquer falha.
+- **Fail Fast**: Validações robustas via *Form Requests* e exceções de domínio customizadas identificam falhas antes do processamento pesado.
+
+---
+
+## 🚀 Instalação e Execução
+
+A aplicação é totalmente dockerizada para facilitar o desenvolvimento e deploy.
+
+### Pré-requisitos
+- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados.
+
+### Start Rápido
+Utilize o `Makefile` incluído para automatizar a configuração inicial:
+
+1. **Setup Completo**:
    ```bash
-   git clone <repo-url>
-   cd simplified-platform
+   make setup
+   ```
+   *(Este comando cria o .env, sobe os containers, instala dependências e executa migrations com seeds)*
+
+2. **Subir a aplicação**:
+   ```bash
+   make up
    ```
 
-2. **Configurar o ambiente:**
-   O arquivo `.env` já foi pré-configurado para funcionar com o Docker. Caso precise de ajustes:
+3. **Acompanhar Logs**:
    ```bash
-   cp .env.example .env
+   make logs
    ```
 
-3. **Subir os containers:**
-   ```bash
-   docker compose up -d --build
-   ```
+### Outros comandos úteis:
+- `make test`: Executa a suíte completa de testes (Pest/PHPUnit).
+- `make down`: Encerra todos os serviços.
+- `make reload`: Reinicia o worker do Octane (aplicação).
 
-4. **Instalar dependências (caso não tenha sido feito automaticamente):**
-   ```bash
-   docker compose exec app composer install
-   ```
+---
 
-5. **Gerar a chave da aplicação:**
-   ```bash
-   docker compose exec app php artisan key:generate
-   ```
+## 📖 Documentação da API
 
-6. **Executar as migrations:**
-   ```bash
-   docker compose exec app php artisan migrate
-   ```
+### Efetuar Transferência
+`POST /transfer`
 
-## Acessando a Aplicação
+Realiza a transferência de valores entre usuários comuns e de usuários comuns para lojistas.
 
-A aplicação estará disponível em `http://localhost:8000`.
+**Exemplo de Request:**
+```json
+{
+  "value": 100.50,
+  "payer": "550e8400-e29b-41d4-a716-446655440000",
+  "payee": "660f9511-f30c-52e5-b827-557766551111"
+}
+```
 
-## Comandos Úteis
+**Resposta de Sucesso (201 Created):**
+```json
+{
+  "id": "770g0622-g41d-63f6-c938-668877662222",
+  "payer_wallet_id": "...",
+  "payee_wallet_id": "...",
+  "amount": "100.50",
+  "created_at": "2026-01-17T16:19:00.000000Z"
+}
+```
 
-- **Logs do Octane:**
-  ```bash
-  docker compose logs -f app
-  ```
+**Resposta de Erro (Ex: Saldo Insuficiente - 422/400):**
+```json
+{
+  "message": "Saldo insuficiente para realizar a transferência."
+}
+```
 
-- **Reiniciar Octane:**
-  ```bash
-  docker compose exec app php artisan octane:reload
-  ```
+> **Fluxo Interno**: Validação -> Consulta Autorizador Externo -> Transação Bancária -> Disparo de Notificação (Async via Redis).
 
-- **Executar Testes:**
-  ```bash
-  docker compose exec app php artisan test
-  ```
+---
+
+## 🧪 Como Rodar os Testes
+
+A aplicação possui testes de unidade e integração que garantem a confiabilidade das regras de negócio.
+
+```bash
+make test
+```
+
+Os cenários testados incluem:
+- Transferência bem-sucedida entre usuários.
+- Impedimento de transferência iniciada por lojista.
+- Validação de saldo insuficiente.
+- Tratamento de falhas no serviço autorizador.
+
+---
+
+## ✨ Diferenciais Implementados
+
+- ✅ **Dockerização Modular**: Containers separados para App (Swoole), DB, Redis e Queue Worker.
+- ✅ **Resiliência em Notificações**: Uso de Filas com estratégia de *Retry* e *Exponential Backoff*.
+- ✅ **Validadores Robustos**: Tratamento centralizado de erros e validações de entrada rigorosas.
+- ✅ **CI/CD Ready**: Estrutura preparada para automação de testes e deploys.
+
+---
+Desenvolvido como projeto técnico.
