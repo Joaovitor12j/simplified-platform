@@ -124,4 +124,24 @@ Os cenários testados incluem:
 - ✅ **CI/CD Ready**: Estrutura preparada para automação de testes e deploys.
 
 ---
+
+## 🔮 Propostas de Melhoria na Arquitetura
+
+Visando a evolução do projeto para um cenário de alta volumetria e produção (Go-to-Market), sugiro os seguintes passos:
+
+1.  **Idempotência em Transações**:
+    -   **Cenário**: Evitar duplicidade de transferências em casos de instabilidade de rede (retries do cliente).
+    -   **Solução**: Implementar middleware que valida o header `x-idempotency-key` via Redis antes de processar o débito.
+
+2.  **Observabilidade (Tracing Distribuído)**:
+    -   **Cenário**: Dificuldade de rastrear falhas em processos assíncronos (Fila/Worker).
+    -   **Solução**: Integrar OpenTelemetry para monitorar o trace da requisição desde a API até o consumo do Job pelo Worker.
+
+3.  **Segurança (Autenticação)**:
+    -   **Solução**: Implementar autenticação JWT (OAuth2) via Keycloak ou Laravel Passport, garantindo que apenas o dono da carteira autorize o débito.
+
+4.  **Auditoria (Ledger)**:
+    -   **Solução**: Implementar uma tabela de *Ledger* (Livro-Razão) imutável (Append-Only) para registrar o histórico de movimentações, facilitando a conciliação financeira e auditoria.
+
+---
 Desenvolvido como projeto técnico.
