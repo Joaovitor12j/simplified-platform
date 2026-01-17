@@ -35,7 +35,7 @@ class TransferController extends Controller
             $transaction = $this->transferService->execute(
                 $payer,
                 $payee,
-                (float) $request->validated('value')
+                (string) $request->validated('value')
             );
 
             SendNotificationJob::dispatch($transaction)->onQueue('default');
@@ -45,7 +45,7 @@ class TransferController extends Controller
             $code = $e->getCode();
 
             $statusCode = match (true) {
-                $code >= 400 && $code < 600 => $code,
+                $code >= 400 && $code < 600 => (int) $code,
                 default => Response::HTTP_INTERNAL_SERVER_ERROR,
             };
 

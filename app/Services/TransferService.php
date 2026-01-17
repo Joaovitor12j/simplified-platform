@@ -34,33 +34,31 @@ readonly final class TransferService implements TransferServiceInterface
      *
      * @param User $payer
      * @param User $payee
-     * @param float $value
+     * @param string $value
      * @return Transaction
      *
      * @throws MerchantPayerException
      * @throws InsufficientBalanceException
      * @throws UnauthorizedTransactionException|Throwable
      */
-    public function execute(User $payer, User $payee, float $value): Transaction
+    public function execute(User $payer, User $payee, string $value): Transaction
     {
-        $formattedValue = number_format($value, 2, '.', '');
-
         $this->validatePayerType($payer);
         $this->authorizeTransaction();
 
-        return DB::transaction(function () use ($payer, $payee, $formattedValue) {
+        return DB::transaction(function () use ($payer, $payee, $value) {
             $payerWallet = $this->walletRepository->findByUserIdForUpdate($payer->id);
             $payeeWallet = $this->walletRepository->findByUserIdForUpdate($payee->id);
 
-            $this->validateBalance($payerWallet, $formattedValue);
+            $this->validateBalance($payerWallet, $value);
 
-            $this->walletRepository->updateBalance($payerWallet->id, '-' . $formattedValue);
-            $this->walletRepository->updateBalance($payeeWallet->id, $formattedValue);
+            $this->walletRepository->updateBalance($payerWallet->id, '-' . $value);
+            $this->walletRepository->updateBalance($payeeWallet->id, $value);
 
             return $this->transactionRepository->create([
                 'payer_wallet_id' => $payerWallet->id,
                 'payee_wallet_id' => $payeeWallet->id,
-                'amount' => $formattedValue,
+                'amount' => $value,
             ]);
         });
     }

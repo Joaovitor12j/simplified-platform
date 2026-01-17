@@ -14,8 +14,8 @@ interface TransferServiceInterface
      *
      * @param User $payer
      * @param User $payee
-     * @param float $value
+     * @param string $value
      * @return Transaction
      */
-    public function execute(User $payer, User $payee, float $value): Transaction;
+    public function execute(User $payer, User $payee, string $value): Transaction;
 }

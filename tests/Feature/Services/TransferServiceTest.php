@@ -46,7 +46,7 @@ class TransferServiceTest extends TestCase
         ]);
 
         // WHEN
-        $this->transferService->execute($payer, $payee, 50.00);
+        $this->transferService->execute($payer, $payee, '50.00');
 
         // THEN
         $this->assertDatabaseHas('wallets', [
@@ -73,7 +73,7 @@ class TransferServiceTest extends TestCase
         $this->expectException(MerchantPayerException::class);
 
         // WHEN
-        $this->transferService->execute($payer, $payee, 50.00);
+        $this->transferService->execute($payer, $payee, '50.00');
     }
 
     public function test_should_throw_exception_when_insufficient_balance(): void
@@ -97,7 +97,7 @@ class TransferServiceTest extends TestCase
         $this->expectException(InsufficientBalanceException::class);
 
         // WHEN
-        $this->transferService->execute($payer, $payee, 50.00);
+        $this->transferService->execute($payer, $payee, '50.00');
     }
 
     public function test_should_throw_exception_when_not_authorized_externally(): void
@@ -120,6 +120,6 @@ class TransferServiceTest extends TestCase
         $this->expectException(UnauthorizedTransactionException::class);
 
         // WHEN
-        $this->transferService->execute($payer, $payee, 50.00);
+        $this->transferService->execute($payer, $payee, '50.00');
     }
 }
