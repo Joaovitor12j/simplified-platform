@@ -22,7 +22,10 @@ class Transaction extends Model
     ];
 
     protected $casts = [
+        'id' => 'string',
         'amount' => 'decimal:2',
+        'payer_wallet_id' => 'string',
+        'payee_wallet_id' => 'string',
     ];
 
     /**

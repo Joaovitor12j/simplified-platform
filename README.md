@@ -1,8 +1,8 @@
 # Simplified Platform - Backend
 
-Este projeto é uma implementação do desafio técnico.
+Este projeto Ã© uma implementaÃ§Ã£o do desafio tÃ©cnico.
 
-## Stack Tecnológica
+## Stack TecnolÃ³gica
 
 - **PHP 8.5**
 - **Laravel 12**
@@ -11,7 +11,7 @@ Este projeto é uma implementação do desafio técnico.
 - **Redis**
 - **Docker & Docker Compose**
 
-## Pré-requisitos
+## PrÃ©-requisitos
 
 - Docker
 - Docker Compose
@@ -20,14 +20,14 @@ Este projeto é uma implementação do desafio técnico.
 
 Siga os passos abaixo para configurar o ambiente de desenvolvimento:
 
-1. **Clonar o repositório:**
+1. **Clonar o repositÃ³rio:**
    ```bash
    git clone <repo-url>
    cd simplified-platform
    ```
 
 2. **Configurar o ambiente:**
-   O arquivo `.env` já foi pré-configurado para funcionar com o Docker. Caso precise de ajustes:
+   O arquivo `.env` jÃ¡ foi prÃ©-configurado para funcionar com o Docker. Caso precise de ajustes:
    ```bash
    cp .env.example .env
    ```
@@ -37,12 +37,12 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento:
    docker compose up -d --build
    ```
 
-4. **Instalar dependências (caso não tenha sido feito automaticamente):**
+4. **Instalar dependÃªncias (caso nÃ£o tenha sido feito automaticamente):**
    ```bash
    docker compose exec app composer install
    ```
 
-5. **Gerar a chave da aplicação:**
+5. **Gerar a chave da aplicaÃ§Ã£o:**
    ```bash
    docker compose exec app php artisan key:generate
    ```
@@ -52,11 +52,11 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento:
    docker compose exec app php artisan migrate
    ```
 
-## Acessando a Aplicação
+## Acessando a AplicaÃ§Ã£o
 
-A aplicação estará disponível em `http://localhost:8000`.
+A aplicaÃ§Ã£o estarÃ¡ disponÃ­vel em `http://localhost:8000`.
 
-## Comandos Úteis
+## Comandos Ãšteis
 
 - **Logs do Octane:**
   ```bash

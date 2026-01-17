@@ -8,7 +8,7 @@ use Exception;
 
 class MerchantPayerException extends Exception
 {
-    public function __construct(string $message = "Lojistas não podem realizar transferências.")
+    public function __construct(string $message = "Lojistas nÃ£o podem realizar transferÃªncias.")
     {
         parent::__construct($message, 403);
     }

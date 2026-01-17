@@ -29,6 +29,13 @@ class User extends Authenticatable
         'type',
     ];
 
+    protected $casts = [
+        'id' => 'string',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'type' => UserType::class,
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
