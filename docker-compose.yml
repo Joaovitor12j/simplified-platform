@@ -18,6 +18,24 @@ services:
     networks:
       - simplify_network
 
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: simplify_worker
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    command: php artisan queue:work --tries=3
+    depends_on:
+      app:
+        condition: service_started
+      redis:
+        condition: service_started
+    networks:
+      - simplify_network
+
   db:
     image: postgres:16-alpine
     container_name: simplify_db
