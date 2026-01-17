@@ -54,6 +54,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Set the user's type.
+     *
+     * @param string|UserType $value
+     * @return void
+     */
+    protected function setTypeAttribute(string|UserType $value): void
+    {
+        $this->attributes['type'] = $value instanceof UserType ? $value->value : UserType::fromValue($value)->value;
+    }
+
+    /**
      * Get the wallet associated with the user.
      */
     public function wallet(): HasOne
