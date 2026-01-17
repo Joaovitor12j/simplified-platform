@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Contracts;
 
+use App\Models\Transaction;
 use App\Models\User;
 
 interface TransferServiceInterface
@@ -14,7 +15,7 @@ interface TransferServiceInterface
      * @param User $payer
      * @param User $payee
      * @param float $value
-     * @return void
+     * @return Transaction
      */
-    public function execute(User $payer, User $payee, float $value): void;
+    public function execute(User $payer, User $payee, float $value): Transaction;
 }

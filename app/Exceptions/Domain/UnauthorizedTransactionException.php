@@ -8,7 +8,7 @@ use Exception;
 
 class UnauthorizedTransactionException extends Exception
 {
-    public function __construct(string $message = "TransaÁ„o n„o autorizada pelo serviÁo externo.")
+    public function __construct(string $message = "Transa√ß√£o n√£o autorizada pelo servi√ßo externo.")
     {
         parent::__construct($message, 403);
     }

@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Service responsible for external transaction authorization.
+ * ServiÃ§o responsÃ¡vel pela autorizaÃ§Ã£o de transaÃ§Ãµes externas.
  */
-class AuthorizationService implements AuthorizationServiceInterface
+final class AuthorizationService implements AuthorizationServiceInterface
 {
     private string $url = 'https://util.devi.tools/api/v2/authorize';
 
@@ -30,7 +30,7 @@ class AuthorizationService implements AuthorizationServiceInterface
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
-                throw new UnauthorizedTransactionException("Serviço de autorização externo indisponível.");
+                throw new UnauthorizedTransactionException("ServiÃ§o de autorizaÃ§Ã£o externo indisponÃ­vel.");
             }
 
             $data = $response->json();
@@ -49,7 +49,7 @@ class AuthorizationService implements AuthorizationServiceInterface
                 'message' => $e->getMessage(),
             ]);
 
-            throw new UnauthorizedTransactionException("Erro ao conectar ao serviço de autorização externo.");
+            throw new UnauthorizedTransactionException("Erro ao conectar ao serviÃ§o de autorizaÃ§Ã£o externo.");
         }
     }
 }
