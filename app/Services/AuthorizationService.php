@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Services\Contracts\AuthorizationServiceInterface;
 use App\Exceptions\Domain\UnauthorizedTransactionException;
+use App\Services\Contracts\AuthorizationServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -30,13 +30,13 @@ final class AuthorizationService implements AuthorizationServiceInterface
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
-                throw new UnauthorizedTransactionException("Serviço de autorização externo indisponível.");
+                throw new UnauthorizedTransactionException('Serviço de autorização externo indisponível.');
             }
 
             $data = $response->json();
 
             if (! isset($data['data']['authorization']) || $data['data']['authorization'] !== true) {
-                throw new UnauthorizedTransactionException();
+                throw new UnauthorizedTransactionException;
             }
 
             return true;
@@ -47,7 +47,7 @@ final class AuthorizationService implements AuthorizationServiceInterface
                 'message' => $e->getMessage(),
             ]);
 
-            throw new UnauthorizedTransactionException("Erro ao conectar ao serviço de autorização externo.");
+            throw new UnauthorizedTransactionException('Erro ao conectar ao serviço de autorização externo.');
         }
     }
 }

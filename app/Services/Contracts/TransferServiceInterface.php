@@ -11,11 +11,6 @@ interface TransferServiceInterface
 {
     /**
      * Executes a transfer between two users.
-     *
-     * @param User $payer
-     * @param User $payee
-     * @param string $value
-     * @return Transaction
      */
     public function execute(User $payer, User $payee, string $value): Transaction;
 }

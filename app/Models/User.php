@@ -14,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasUuids;
+    use HasFactory, HasUuids, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,9 +62,6 @@ class User extends Authenticatable
 
     /**
      * Set the user's type.
-     *
-     * @param string|UserType $value
-     * @return void
      */
     protected function setTypeAttribute(string|UserType $value): void
     {

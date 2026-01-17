@@ -31,8 +31,8 @@ class TransferApiTest extends TestCase
         Http::fake([
             'https://util.devi.tools/api/v2/authorize' => Http::response([
                 'status' => 'success',
-                'data' => ['authorization' => true]
-            ], 200)
+                'data' => ['authorization' => true],
+            ], 200),
         ]);
 
         $payload = [
@@ -56,12 +56,12 @@ class TransferApiTest extends TestCase
 
         $this->assertDatabaseHas('wallets', [
             'user_id' => $payer->id,
-            'balance' => 50.00
+            'balance' => 50.00,
         ]);
 
         $this->assertDatabaseHas('wallets', [
             'user_id' => $payee->id,
-            'balance' => 50.00
+            'balance' => 50.00,
         ]);
 
         Queue::assertPushed(SendNotificationJob::class);
@@ -112,8 +112,8 @@ class TransferApiTest extends TestCase
         Http::fake([
             'https://util.devi.tools/api/v2/authorize' => Http::response([
                 'status' => 'success',
-                'data' => ['authorization' => true]
-            ], 200)
+                'data' => ['authorization' => true],
+            ], 200),
         ]);
 
         $payload = [
@@ -142,7 +142,7 @@ class TransferApiTest extends TestCase
         Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
 
         Http::fake([
-            'https://util.devi.tools/api/v2/authorize' => Http::response([], 500)
+            'https://util.devi.tools/api/v2/authorize' => Http::response([], 500),
         ]);
 
         $payload = [

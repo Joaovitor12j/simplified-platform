@@ -9,8 +9,7 @@ use App\Models\Transaction;
 interface TransactionRepositoryInterface
 {
     /**
-     * @param array{payer_wallet_id: string, payee_wallet_id: string, amount: string} $data
-     * @return Transaction
+     * @param  array{payer_wallet_id: string, payee_wallet_id: string, amount: string}  $data
      */
     public function create(array $data): Transaction;
 }

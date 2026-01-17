@@ -23,7 +23,7 @@ class SendNotificationJobTest extends TestCase
     {
         // GIVEN
         Http::fake([
-            'https://util.devi.tools/api/v1/notify' => Http::response([])
+            'https://util.devi.tools/api/v1/notify' => Http::response([]),
         ]);
 
         $payer = User::factory()->create();
@@ -34,7 +34,7 @@ class SendNotificationJobTest extends TestCase
         $transaction = Transaction::create([
             'payer_wallet_id' => $payerWallet->id,
             'payee_wallet_id' => $payeeWallet->id,
-            'amount' => '100.00'
+            'amount' => '100.00',
         ]);
 
         $job = new SendNotificationJob($transaction);
@@ -53,7 +53,7 @@ class SendNotificationJobTest extends TestCase
     {
         // GIVEN
         Http::fake([
-            'https://util.devi.tools/api/v1/notify' => Http::response([], 500)
+            'https://util.devi.tools/api/v1/notify' => Http::response([], 500),
         ]);
 
         $payer = User::factory()->create();
@@ -64,7 +64,7 @@ class SendNotificationJobTest extends TestCase
         $transaction = Transaction::create([
             'payer_wallet_id' => $payerWallet->id,
             'payee_wallet_id' => $payeeWallet->id,
-            'amount' => '100.00'
+            'amount' => '100.00',
         ]);
 
         $job = new SendNotificationJob($transaction);
@@ -93,7 +93,7 @@ class SendNotificationJobTest extends TestCase
         $transaction = Transaction::create([
             'payer_wallet_id' => $payerWallet->id,
             'payee_wallet_id' => $payeeWallet->id,
-            'amount' => '100.00'
+            'amount' => '100.00',
         ]);
 
         $job = new SendNotificationJob($transaction);
