@@ -1,0 +1,307 @@
+
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+   INFO  Server running?.
+  Local: http://0.0.0.0:8000
+  Press Ctrl+C to stop the server
+   ValueError
+  First element must contain a non-empty program name
+  at vendor/symfony/process/Process.php:366
+    362?             pcntl_sigprocmask(\SIG_BLOCK, $this->ignoredSignals, $oldMask);
+    363?         }
+    364?
+    365?         try {
+  ? 366?             $process = @proc_open($commandline, $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+    367?
+    368?             // Ensure array vs string commands behave the same
+    369?             if (!$process && \is_array($commandline)) {
+    370?                 $process = @proc_open('exec '.$this->buildShellCommandline($commandline), $descriptors, $this->processPipes->pipes, $this->cwd, $envPairs, $this->options);
+      +30 vendor frames
+  31  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
