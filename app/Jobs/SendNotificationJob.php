@@ -19,42 +19,29 @@ class SendNotificationJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The number of times the job may be attempted.
+     * O número de vezes que a tarefa pode ser tentada.
      *
      * @var int
      */
-    public $tries = 3;
+    public int $tries = 5;
 
     /**
-     * The number of seconds to wait before retrying the job.
+     * O número de segundos a aguardar antes de tentar novamente a tarefa.
      *
-     * @var int
+     * @var array<int, int>
      */
-    public $backoff = 10;
+    public array $backoff = [10, 30, 60, 120];
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(
         public Transaction $transaction
     ) {
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
-        $response = Http::post('https://util.devi.tools/api/v1/notify');
-
-        if ($response->failed()) {
-            throw new \RuntimeException('Failed to send notification');
-        }
+        Http::timeout(5)->post('https://util.devi.tools/api/v1/notify')->throw();
     }
 
-    /**
-     * Handle a job failure.
-     */
     public function failed(Throwable $exception): void
     {
         Log::error('Notification failed for transaction ' . $this->transaction->id, [

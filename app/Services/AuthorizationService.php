@@ -23,7 +23,7 @@ final class AuthorizationService implements AuthorizationServiceInterface
     public function authorize(): bool
     {
         try {
-            $response = Http::get($this->url);
+            $response = Http::timeout(5)->retry(2, 100, null, false)->get($this->url);
 
             if ($response->failed()) {
                 Log::warning('External authorization service failed', [
@@ -40,11 +40,9 @@ final class AuthorizationService implements AuthorizationServiceInterface
             }
 
             return true;
+        } catch (UnauthorizedTransactionException $e) {
+            throw $e;
         } catch (Exception $e) {
-            if ($e instanceof UnauthorizedTransactionException) {
-                throw $e;
-            }
-
             Log::error('Error connecting to external authorization service', [
                 'message' => $e->getMessage(),
             ]);

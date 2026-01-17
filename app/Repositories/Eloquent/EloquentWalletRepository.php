@@ -11,8 +11,8 @@ class EloquentWalletRepository implements WalletRepositoryInterface
 {
     public function updateBalance(string $walletId, string $amount): void
     {
-        $wallet = Wallet::findOrFail($walletId);
-        $newBalance = bcadd($wallet->balance, $amount, 2);
+        $wallet = Wallet::lockForUpdate()->findOrFail($walletId);
+        $newBalance = bcadd((string) $wallet->balance, $amount, 2);
         $wallet->update(['balance' => $newBalance]);
     }
 
