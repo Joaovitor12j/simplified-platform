@@ -13,8 +13,6 @@ class Transaction extends Model
 {
     use HasFactory, HasUuids;
 
-    public const null UPDATED_AT = null;
-
     protected $fillable = [
         'payer_wallet_id',
         'payee_wallet_id',
