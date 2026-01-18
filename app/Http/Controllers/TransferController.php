@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\DTOs\TransferDTO;
 use App\Http\Requests\TransferRequest;
 use App\Jobs\SendNotificationJob;
-use App\Models\User;
 use App\Services\Contracts\TransferServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -25,16 +25,11 @@ class TransferController extends Controller
     public function store(TransferRequest $request): JsonResponse
     {
         try {
-            $payer = User::findOrFail($request->validated('payer'));
-            $payee = User::findOrFail($request->validated('payee'));
+            $transferDTO = TransferDTO::fromArray($request->validated());
 
-            $transaction = $this->transferService->execute(
-                $payer,
-                $payee,
-                (string) $request->validated('value')
-            );
+            $transaction = $this->transferService->execute($transferDTO);
 
-            SendNotificationJob::dispatch($transaction)->onQueue('default');
+            SendNotificationJob::dispatch($transaction);
 
             return response()->json($transaction, Response::HTTP_CREATED);
         } catch (Throwable $e) {

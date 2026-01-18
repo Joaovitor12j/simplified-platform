@@ -13,9 +13,14 @@ use Illuminate\Support\Facades\Log;
 /**
  * Serviço responsável pela autorização de transações externas.
  */
-final class AuthorizationService implements AuthorizationServiceInterface
+final readonly class AuthorizationService implements AuthorizationServiceInterface
 {
-    private string $url = 'https://util.devi.tools/api/v2/authorize';
+    private string $url;
+
+    public function __construct()
+    {
+        $this->url = 'https://util.devi.tools/api/v2/authorize';
+    }
 
     /**
      * @throws UnauthorizedTransactionException
