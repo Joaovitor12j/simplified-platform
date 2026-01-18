@@ -1,6 +1,6 @@
 # Pagamento Simplificado - Desafio Back-end
 
-[![PHP Version](https://img.shields.io/badge/PHP-8.3-777bb4.svg?style=flat-square&logo=php)](https://www.php.net/)
+[![PHP Version](https://img.shields.io/badge/PHP-8.4-777bb4.svg?style=flat-square&logo=php)](https://www.php.net/)
 [![Laravel Version](https://img.shields.io/badge/Laravel-11-ff2d20.svg?style=flat-square&logo=laravel)](https://laravel.com/)
 [![Docker](https://img.shields.io/badge/Docker-Enabled-2496ed.svg?style=flat-square&logo=docker)](https://www.docker.com/)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat-square)](#)
