@@ -1,6 +1,6 @@
 # Pagamento Simplificado - Desafio Back-end
 
-[![PHP Version](https://img.shields.io/badge/PHP-8.3-777bb4.svg?style=flat-square&logo=php)](https://www.php.net/)
+[![PHP Version](https://img.shields.io/badge/PHP-8.4-777bb4.svg?style=flat-square&logo=php)](https://www.php.net/)
 [![Laravel Version](https://img.shields.io/badge/Laravel-11-ff2d20.svg?style=flat-square&logo=laravel)](https://laravel.com/)
 [![Docker](https://img.shields.io/badge/Docker-Enabled-2496ed.svg?style=flat-square&logo=docker)](https://www.docker.com/)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat-square)](#)
@@ -20,11 +20,17 @@ Este projeto é uma implementação de uma API RESTful para a simulação de uma
 A arquitetura foi desenhada seguindo os princípios de **Clean Architecture** e **SOLID**, garantindo que a lógica de negócio esteja desacoplada de detalhes de infraestrutura.
 
 - **Stack Tecnológica**: PHP 8.3+, Laravel 11+, Laravel Octane (Swoole), PostgreSQL, Redis e Docker.
-- **Organização de Código**: Implementação de *Services* e *Repositories* para isolar as regras de domínio e abstrair a persistência de dados.
+- **Organização de Código**:
+    - **Data Transfer Objects (DTOs)**: Utilizados para transitar dados entre o Controller e a camada de Serviço, garantindo tipagem forte e validação precoce.
+    - **Repository Pattern (DIP)**: Implementação de Interfaces e Repositórios (`UserRepositoryInterface`, `WalletRepositoryInterface`) para isolar as regras de domínio e abstrair a persistência de dados.
+    - **Service Layer**: Onde reside a lógica de negócio orquestrada de forma desacoplada.
 - **Segurança e Precisão Financeira**:
     - **UUIDs**: Utilizados como chaves primárias em vez de IDs sequenciais, aumentando a segurança e facilitando a distribuição de dados.
     - **Tipos Decimais (BCMath)**: Todos os cálculos financeiros são realizados com precisão arbitrária (strings), evitando os erros de arredondamento comuns ao tipo `float`.
-- **Atomicidade e Integridade (ACID)**: Transferências são protegidas por transações de banco de dados (`DB Transactions`), garantindo que a operação seja revertida integralmente em caso de qualquer falha.
+- **Atomicidade e Integridade (ACID)**:
+    - **Transações Atômicas**: Transferências são protegidas por `DB::transaction`, garantindo que a operação seja revertida integralmente em caso de qualquer falha.
+    - **Otimização de Performance**: Ambas as carteiras envolvidas na transferência são buscadas em uma **única query** utilizando `whereIn` com `lockForUpdate`, reduzindo a latência e garantindo consistência em cenários concorrentes.
+    - **Notificações Resilientes**: O despacho de notificações ocorre apenas após o sucesso do commit da transação (`DB::afterCommit`), evitando envios indevidos em caso de rollback.
 - **Fail Fast**: Validações robustas via *Form Requests* e exceções de domínio customizadas identificam falhas antes do processamento pesado.
 
 ---
@@ -119,8 +125,9 @@ Os cenários testados incluem:
 ## ✨ Diferenciais Implementados
 
 - ✅ **Dockerização Modular**: Containers separados para App (Swoole), DB, Redis e Queue Worker.
+- ✅ **Clean Architecture & SOLID**: Código desacoplado e manutenível através de interfaces e injeção de dependência.
 - ✅ **Resiliência em Notificações**: Uso de Filas com estratégia de *Retry* e *Exponential Backoff*.
-- ✅ **Validadores Robustos**: Tratamento centralizado de erros e validações de entrada rigorosas.
+- ✅ **Validadores Robustos**: Tratamento centralizado de erros e validações de entrada rigorosas via FormRequests e DTOs.
 - ✅ **CI/CD Ready**: Estrutura preparada para automação de testes e deploys.
 
 ---

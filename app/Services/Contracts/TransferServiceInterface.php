@@ -12,5 +12,5 @@ interface TransferServiceInterface
     /**
      * Executes a transfer between two users.
      */
-    public function execute(TransferDTO $transferDTO): Transaction;
+    public function execute(TransferDTO $data): Transaction;
 }

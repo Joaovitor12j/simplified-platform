@@ -8,13 +8,16 @@ use App\DTOs\TransferDTO;
 use App\Exceptions\Domain\InsufficientBalanceException;
 use App\Exceptions\Domain\MerchantPayerException;
 use App\Exceptions\Domain\UnauthorizedTransactionException;
+use App\Jobs\SendNotificationJob;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\WalletRepositoryInterface;
 use App\Services\Contracts\AuthorizationServiceInterface;
 use App\Services\Contracts\TransferServiceInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -25,6 +28,7 @@ use Throwable;
 final readonly class TransferService implements TransferServiceInterface
 {
     public function __construct(
+        private UserRepositoryInterface $userRepository,
         private WalletRepositoryInterface $walletRepository,
         private TransactionRepositoryInterface $transactionRepository,
         private AuthorizationServiceInterface $authorizationService
@@ -37,35 +41,51 @@ final readonly class TransferService implements TransferServiceInterface
      * @throws InsufficientBalanceException
      * @throws UnauthorizedTransactionException|Throwable
      */
-    public function execute(TransferDTO $transferDTO): Transaction
+    public function execute(TransferDTO $data): Transaction
     {
-        $payer = User::findOrFail($transferDTO->payerId);
-        $payee = User::findOrFail($transferDTO->payeeId);
+        $payerId = $data->payerId;
+        $payeeId = $data->payeeId;
+        $value = $data->amount;
+
+        $users = $this->userRepository->findMany([$payerId, $payeeId]);
+
+        $payer = $users->firstWhere('id', $payerId);
+        if (! $payer) {
+            throw new ModelNotFoundException('Usuário não encontrado.');
+        }
 
         $this->validatePayerType($payer);
         $this->authorizeTransaction();
 
-        $transaction = DB::transaction(function () use ($payer, $payee, $transferDTO) {
-            $payerWallet = $this->walletRepository->findByUserIdForUpdate((string) $payer->id);
-            $payeeWallet = $this->walletRepository->findByUserIdForUpdate((string) $payee->id);
+        $transaction = DB::transaction(function () use ($payerId, $payeeId, $value) {
+            $wallets = $this->walletRepository->findWalletsByUserIds([$payerId, $payeeId], true);
 
-            $this->validateBalance($payerWallet, $transferDTO->amount);
+            $payerWallet = $wallets->firstWhere('user_id', $payerId);
+            $payeeWallet = $wallets->firstWhere('user_id', $payeeId);
 
-            $this->walletRepository->updateBalance($payerWallet->id, '-'.$transferDTO->amount);
-            $this->walletRepository->updateBalance($payeeWallet->id, $transferDTO->amount);
+            if (! $payerWallet || ! $payeeWallet) {
+                throw new ModelNotFoundException('Uma ou mais carteiras não encontradas.');
+            }
+
+            $this->validateBalance($payerWallet, $value);
+
+            $this->walletRepository->updateBalance($payerWallet->id, '-'.$value);
+            $this->walletRepository->updateBalance($payeeWallet->id, $value);
 
             return $this->transactionRepository->create([
                 'payer_wallet_id' => $payerWallet->id,
                 'payee_wallet_id' => $payeeWallet->id,
-                'amount' => $transferDTO->amount,
+                'amount' => $value,
             ]);
         });
 
+        DB::afterCommit(fn () => SendNotificationJob::dispatch($transaction));
+
         Log::info('Transferência realizada com sucesso', [
             'id' => $transaction->id,
-            'payer' => $payer->id,
-            'payee' => $payee->id,
-            'value' => $transferDTO->amount,
+            'payer' => $payerId,
+            'payee' => $payeeId,
+            'value' => $value,
         ]);
 
         return $transaction;
