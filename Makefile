@@ -44,4 +44,7 @@ lint:
 analyse:
 	@docker compose exec app ./vendor/bin/phpstan analyse --memory-limit=2G
 
+phpmd:
+	@docker run --rm -v $(shell pwd):/project -w /project jakzal/phpqa phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
+
 check: lint analyse test
