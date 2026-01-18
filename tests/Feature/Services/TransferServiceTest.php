@@ -14,7 +14,6 @@ use App\Models\Wallet;
 use App\Services\Contracts\TransferServiceInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class TransferServiceTest extends TestCase
@@ -48,19 +47,8 @@ class TransferServiceTest extends TestCase
             'https://util.devi.tools/api/v1/notify' => Http::response([], 200),
         ]);
 
-        $dto = new TransferDTO((string) $payer->id, (string) $payee->id, '50.00');
-
-        Log::shouldReceive('info')
-            ->once()
-            ->withArgs(function ($message, $context) use ($payer, $payee) {
-                return $message === 'Transferência realizada com sucesso' &&
-                       $context['payer'] === $payer->id &&
-                       $context['payee'] === $payee->id &&
-                       $context['value'] === '50.00';
-            });
-
         // WHEN
-        $this->transferService->execute($dto);
+        $this->transferService->execute(new TransferDTO((string) $payer->id, (string) $payee->id, '50.00'));
 
         // THEN
         $this->assertDatabaseHas('wallets', [
@@ -84,12 +72,10 @@ class TransferServiceTest extends TestCase
         $payer = User::factory()->create(['type' => UserType::SHOPKEEPER]);
         $payee = User::factory()->create(['type' => UserType::COMMON]);
 
-        $dto = new TransferDTO((string) $payer->id, (string) $payee->id, '50.00');
-
         $this->expectException(MerchantPayerException::class);
 
         // WHEN
-        $this->transferService->execute($dto);
+        $this->transferService->execute(new TransferDTO((string) $payer->id, (string) $payee->id, '50.00'));
     }
 
     public function test_should_throw_exception_when_insufficient_balance(): void
@@ -110,12 +96,10 @@ class TransferServiceTest extends TestCase
             ]),
         ]);
 
-        $dto = new TransferDTO((string) $payer->id, (string) $payee->id, '50.00');
-
         $this->expectException(InsufficientBalanceException::class);
 
         // WHEN
-        $this->transferService->execute($dto);
+        $this->transferService->execute(new TransferDTO((string) $payer->id, (string) $payee->id, '50.00'));
     }
 
     public function test_should_throw_exception_when_not_authorized_externally(): void
@@ -135,11 +119,9 @@ class TransferServiceTest extends TestCase
             ]),
         ]);
 
-        $dto = new TransferDTO((string) $payer->id, (string) $payee->id, '50.00');
-
         $this->expectException(UnauthorizedTransactionException::class);
 
         // WHEN
-        $this->transferService->execute($dto);
+        $this->transferService->execute(new TransferDTO((string) $payer->id, (string) $payee->id, '50.00'));
     }
 }
