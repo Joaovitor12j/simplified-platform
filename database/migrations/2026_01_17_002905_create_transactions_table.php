@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignUuid('payer_wallet_id')->constrained('wallets');
             $table->foreignUuid('payee_wallet_id')->constrained('wallets');
             $table->decimal('amount', 10, 2);
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 
