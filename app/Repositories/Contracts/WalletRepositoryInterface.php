@@ -15,5 +15,7 @@ interface WalletRepositoryInterface
 
     public function findByUserIdForUpdate(string $userId): ?Wallet;
 
-    public function findWalletsByUserIds(array $userIds, bool $lock = false): Collection;
+    public function findMany(array $userIds): Collection;
+
+    public function findManyForUpdate(array $userIds): Collection;
 }

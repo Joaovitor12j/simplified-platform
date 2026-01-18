@@ -28,10 +28,10 @@ use Throwable;
 final readonly class TransferService implements TransferServiceInterface
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository,
-        private WalletRepositoryInterface $walletRepository,
-        private TransactionRepositoryInterface $transactionRepository,
-        private AuthorizationServiceInterface $authorizationService
+        private UserRepositoryInterface $users,
+        private WalletRepositoryInterface $wallets,
+        private TransactionRepositoryInterface $transactions,
+        private AuthorizationServiceInterface $authorizer
     ) {}
 
     /**
@@ -47,7 +47,7 @@ final readonly class TransferService implements TransferServiceInterface
         $payeeId = $data->payeeId;
         $value = $data->amount;
 
-        $users = $this->userRepository->findMany([$payerId, $payeeId]);
+        $users = $this->users->findMany([$payerId, $payeeId]);
 
         $payer = $users->firstWhere('id', $payerId);
         if (! $payer) {
@@ -58,7 +58,7 @@ final readonly class TransferService implements TransferServiceInterface
         $this->authorizeTransaction();
 
         $transaction = DB::transaction(function () use ($payerId, $payeeId, $value) {
-            $wallets = $this->walletRepository->findWalletsByUserIds([$payerId, $payeeId], true);
+            $wallets = $this->wallets->findManyForUpdate([$payerId, $payeeId]);
 
             $payerWallet = $wallets->firstWhere('user_id', $payerId);
             $payeeWallet = $wallets->firstWhere('user_id', $payeeId);
@@ -69,10 +69,10 @@ final readonly class TransferService implements TransferServiceInterface
 
             $this->validateBalance($payerWallet, $value);
 
-            $this->walletRepository->updateBalance($payerWallet->id, '-'.$value);
-            $this->walletRepository->updateBalance($payeeWallet->id, $value);
+            $this->wallets->updateBalance($payerWallet->id, '-'.$value);
+            $this->wallets->updateBalance($payeeWallet->id, $value);
 
-            return $this->transactionRepository->create([
+            return $this->transactions->create([
                 'payer_wallet_id' => $payerWallet->id,
                 'payee_wallet_id' => $payeeWallet->id,
                 'amount' => $value,
@@ -107,6 +107,6 @@ final readonly class TransferService implements TransferServiceInterface
 
     private function authorizeTransaction(): void
     {
-        $this->authorizationService->authorize();
+        $this->authorizer->authorize();
     }
 }
