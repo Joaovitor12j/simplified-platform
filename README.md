@@ -4,6 +4,7 @@
 [![Laravel Version](https://img.shields.io/badge/Laravel-11-ff2d20.svg?style=flat-square&logo=laravel)](https://laravel.com/)
 [![Docker](https://img.shields.io/badge/Docker-Enabled-2496ed.svg?style=flat-square&logo=docker)](https://www.docker.com/)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=flat-square)](#)
+[![Quality](https://img.shields.io/badge/Code%20Quality-PHPMD%20%7C%20PHPStan-blueviolet?style=flat-square)](#)
 
 ## 📌 Sobre o Projeto
 
@@ -19,7 +20,7 @@ Este projeto é uma implementação de uma API RESTful para a simulação de uma
 
 A arquitetura foi desenhada seguindo os princípios de **Clean Architecture** e **SOLID**, garantindo que a lógica de negócio esteja desacoplada de detalhes de infraestrutura.
 
-- **Stack Tecnológica**: PHP 8.3+, Laravel 11+, Laravel Octane (Swoole), PostgreSQL, Redis e Docker.
+- **Stack Tecnológica**: PHP 8.4+, Laravel 11+, Laravel Octane (Swoole), PostgreSQL, Redis e Docker.
 - **Organização de Código**:
     - **Data Transfer Objects (DTOs)**: Utilizados para transitar dados entre o Controller e a camada de Serviço, garantindo tipagem forte e validação precoce.
     - **Repository Pattern (DIP)**: Implementação de Interfaces e Repositórios (`UserRepositoryInterface`, `WalletRepositoryInterface`) para isolar as regras de domínio e abstrair a persistência de dados.
@@ -61,8 +62,37 @@ Utilize o `Makefile` incluído para automatizar a configuração inicial:
    make logs
    ```
 
+### ✅ Qualidade de Código e Testes
+
+O projeto adota um pipeline rigoroso de qualidade estática e testes automatizados.
+
+1. Análise de Qualidade (PHPMD & PHPStan)
+
+   Seguindo as recomendações do desafio, utilizamos ferramentas para garantir Clean Code e detectar bugs precoces.
+   ```bash
+   # Rodar Mess Detector (Complexidade, Naming, Unused Code)
+   make phpmd
+   ```
+   
+    ```bash
+   # Rodar Análise Estática (Tipagem e Lógica)
+   make check
+   ```
+   
+2. **Linting e Formatação de Código**
+   Garantindo consistência e qualidade do código.
+    ```bash
+   # Rodar Linting (PSR-12, PHP Coding Standards)
+   make lint
+   ```
+   
+3. **Testes Automatizadoso**
+   Suíte completa de testes de Unidade e Integração (Feature).
+   ```bash
+   make test
+   ```
+   
 ### Outros comandos úteis:
-- `make test`: Executa a suíte completa de testes (Pest/PHPUnit).
 - `make down`: Encerra todos os serviços.
 - `make reload`: Reinicia o worker do Octane (aplicação).
 
@@ -102,17 +132,16 @@ Realiza a transferência de valores entre usuários comuns e de usuários comuns
 }
 ```
 
-> **Fluxo Interno**: Validação -> Consulta Autorizador Externo -> Transação Bancária -> Disparo de Notificação (Async via Redis).
+> **Fluxo de Processamento:**
+1. Validação de Input (FormRequest).
+2. Verificação de Regras (Lojista não paga, Saldo suficiente).
+3. Consulta a Autorizador Externo.
+4. Lock de Banco e Transferência (Débito/Crédito).
+5. Commit da Transação.
+6. Disparo Assíncrono de Notificação (Redis).
+7. Retorno 201 Created.
 
 ---
-
-## 🧪 Como Rodar os Testes
-
-A aplicação possui testes de unidade e integração que garantem a confiabilidade das regras de negócio.
-
-```bash
-make test
-```
 
 Os cenários testados incluem:
 - Transferência bem-sucedida entre usuários.

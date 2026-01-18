@@ -56,6 +56,9 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Execute Lint
+        run: ./vendor/bin/pint --test
+
       - name: Execute Static Analysis
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
 

@@ -27,14 +27,13 @@ final readonly class EloquentWalletRepository implements WalletRepositoryInterfa
         return Wallet::where('user_id', $userId)->lockForUpdate()->first();
     }
 
-    public function findWalletsByUserIds(array $userIds, bool $lock = false): Collection
+    public function findMany(array $userIds): Collection
     {
-        $query = Wallet::whereIn('user_id', $userIds);
+        return Wallet::whereIn('user_id', $userIds)->get();
+    }
 
-        if ($lock) {
-            $query->lockForUpdate();
-        }
-
-        return $query->get();
+    public function findManyForUpdate(array $userIds): Collection
+    {
+        return Wallet::whereIn('user_id', $userIds)->lockForUpdate()->get();
     }
 }
