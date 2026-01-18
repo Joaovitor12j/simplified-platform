@@ -36,7 +36,15 @@ class SendNotificationJob implements ShouldQueue
 
     public function handle(): void
     {
-        Http::timeout(5)->post('https://util.devi.tools/api/v1/notify')->throw();
+        $response = Http::timeout(5)->post('https://util.devi.tools/api/v1/notify');
+
+        if ($response->failed()) {
+            $response->throw();
+        }
+
+        Log::info('Notificação enviada com sucesso', [
+            'transaction_id' => $this->transaction->id,
+        ]);
     }
 
     public function failed(Throwable $exception): void

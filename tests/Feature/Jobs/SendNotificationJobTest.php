@@ -37,6 +37,12 @@ class SendNotificationJobTest extends TestCase
             'amount' => '100.00',
         ]);
 
+        Log::shouldReceive('info')
+            ->once()
+            ->with('Notificação enviada com sucesso', [
+                'transaction_id' => $transaction->id,
+            ]);
+
         $job = new SendNotificationJob($transaction);
 
         // WHEN

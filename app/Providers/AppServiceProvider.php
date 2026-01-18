@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Events\TransactionCompleted;
+use App\Listeners\SendNotificationListener;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
 use App\Repositories\Contracts\WalletRepositoryInterface;
 use App\Repositories\Eloquent\EloquentTransactionRepository;
@@ -12,6 +14,7 @@ use App\Services\AuthorizationService;
 use App\Services\Contracts\AuthorizationServiceInterface;
 use App\Services\Contracts\TransferServiceInterface;
 use App\Services\TransferService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -47,6 +50,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            TransactionCompleted::class,
+            SendNotificationListener::class
+        );
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DTOs\TransferDTO;
 use App\Exceptions\Domain\InsufficientBalanceException;
 use App\Exceptions\Domain\MerchantPayerException;
 use App\Exceptions\Domain\UnauthorizedTransactionException;
@@ -15,6 +16,7 @@ use App\Repositories\Contracts\WalletRepositoryInterface;
 use App\Services\Contracts\AuthorizationServiceInterface;
 use App\Services\Contracts\TransferServiceInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 /**
@@ -31,31 +33,42 @@ final readonly class TransferService implements TransferServiceInterface
     /**
      * Executes a transfer between two users.
      *
-     *
      * @throws MerchantPayerException
      * @throws InsufficientBalanceException
      * @throws UnauthorizedTransactionException|Throwable
      */
-    public function execute(User $payer, User $payee, string $value): Transaction
+    public function execute(TransferDTO $transferDTO): Transaction
     {
+        $payer = User::findOrFail($transferDTO->payerId);
+        $payee = User::findOrFail($transferDTO->payeeId);
+
         $this->validatePayerType($payer);
         $this->authorizeTransaction();
 
-        return DB::transaction(function () use ($payer, $payee, $value) {
+        $transaction = DB::transaction(function () use ($payer, $payee, $transferDTO) {
             $payerWallet = $this->walletRepository->findByUserIdForUpdate((string) $payer->id);
             $payeeWallet = $this->walletRepository->findByUserIdForUpdate((string) $payee->id);
 
-            $this->validateBalance($payerWallet, $value);
+            $this->validateBalance($payerWallet, $transferDTO->amount);
 
-            $this->walletRepository->updateBalance($payerWallet->id, '-'.$value);
-            $this->walletRepository->updateBalance($payeeWallet->id, $value);
+            $this->walletRepository->updateBalance($payerWallet->id, '-'.$transferDTO->amount);
+            $this->walletRepository->updateBalance($payeeWallet->id, $transferDTO->amount);
 
             return $this->transactionRepository->create([
                 'payer_wallet_id' => $payerWallet->id,
                 'payee_wallet_id' => $payeeWallet->id,
-                'amount' => $value,
+                'amount' => $transferDTO->amount,
             ]);
         });
+
+        Log::info('Transferência realizada com sucesso', [
+            'id' => $transaction->id,
+            'payer' => $payer->id,
+            'payee' => $payee->id,
+            'value' => $transferDTO->amount,
+        ]);
+
+        return $transaction;
     }
 
     private function validatePayerType(User $payer): void

@@ -7,7 +7,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Transaction;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
 
-class EloquentTransactionRepository implements TransactionRepositoryInterface
+final readonly class EloquentTransactionRepository implements TransactionRepositoryInterface
 {
     /**
      * @param  array{payer_wallet_id: string, payee_wallet_id: string, amount: string}  $data

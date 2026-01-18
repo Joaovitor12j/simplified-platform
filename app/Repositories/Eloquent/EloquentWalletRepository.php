@@ -7,7 +7,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Wallet;
 use App\Repositories\Contracts\WalletRepositoryInterface;
 
-class EloquentWalletRepository implements WalletRepositoryInterface
+final readonly class EloquentWalletRepository implements WalletRepositoryInterface
 {
     public function updateBalance(string $walletId, string $amount): void
     {
