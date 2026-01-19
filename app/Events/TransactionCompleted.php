@@ -13,6 +13,8 @@ class TransactionCompleted
     use Dispatchable, SerializesModels;
 
     public function __construct(
-        public Transaction $transaction
+        public Transaction $transaction,
+        public string $payerId,
+        public string $payeeId
     ) {}
 }

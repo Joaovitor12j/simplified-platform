@@ -5,13 +5,8 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Events\TransactionCompleted;
+use App\Listeners\LogTransactionListener;
 use App\Listeners\SendNotificationListener;
-use App\Repositories\Contracts\TransactionRepositoryInterface;
-use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Repositories\Contracts\WalletRepositoryInterface;
-use App\Repositories\Eloquent\EloquentTransactionRepository;
-use App\Repositories\Eloquent\EloquentUserRepository;
-use App\Repositories\Eloquent\EloquentWalletRepository;
 use App\Services\AuthorizationService;
 use App\Services\Contracts\AuthorizationServiceInterface;
 use App\Services\Contracts\TransferServiceInterface;
@@ -26,21 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
-            UserRepositoryInterface::class,
-            EloquentUserRepository::class
-        );
-
-        $this->app->bind(
-            WalletRepositoryInterface::class,
-            EloquentWalletRepository::class
-        );
-
-        $this->app->bind(
-            TransactionRepositoryInterface::class,
-            EloquentTransactionRepository::class
-        );
-
         $this->app->bind(
             AuthorizationServiceInterface::class,
             AuthorizationService::class
@@ -60,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
         $events->listen(
             TransactionCompleted::class,
             SendNotificationListener::class
+        );
+
+        $events->listen(
+            TransactionCompleted::class,
+            LogTransactionListener::class
         );
     }
 }

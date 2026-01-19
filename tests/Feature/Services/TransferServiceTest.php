@@ -72,6 +72,9 @@ class TransferServiceTest extends TestCase
         $payer = User::factory()->create(['type' => UserType::SHOPKEEPER]);
         $payee = User::factory()->create(['type' => UserType::COMMON]);
 
+        Wallet::factory()->create(['user_id' => $payer->id, 'balance' => 100.00]);
+        Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
+
         $this->expectException(MerchantPayerException::class);
 
         // WHEN

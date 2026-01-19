@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Exceptions\Domain\InsufficientBalanceException;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -47,5 +48,17 @@ class Wallet extends Model
     public function receivedTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'payee_wallet_id');
+    }
+
+    /**
+     * Validates if the wallet has enough balance.
+     *
+     * @throws InsufficientBalanceException
+     */
+    public function validateBalance(string $amount): void
+    {
+        if (bccomp($this->balance, $amount, 2) === -1) {
+            throw new InsufficientBalanceException;
+        }
     }
 }
