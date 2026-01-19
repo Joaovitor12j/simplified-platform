@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\DTOs\TransferDTO;
 use App\Http\Requests\TransferRequest;
 use App\Services\Contracts\TransferServiceInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class TransferController extends Controller
 {
     public function __construct(
-        private readonly TransferServiceInterface $transferService
+        private readonly TransferServiceInterface $transferService,
+        private readonly LoggerInterface $logger
     ) {}
 
     /**
@@ -25,7 +25,7 @@ class TransferController extends Controller
     {
         try {
             $transaction = $this->transferService->execute(
-                TransferDTO::fromArray($request->validated())
+                $request->toDTO()
             );
 
             return response()->json($transaction, Response::HTTP_CREATED);
@@ -38,7 +38,7 @@ class TransferController extends Controller
             };
 
             if ($statusCode === Response::HTTP_INTERNAL_SERVER_ERROR) {
-                Log::error('Erro ao processar transferência: '.$e->getMessage(), [
+                $this->logger->error('Erro ao processar transferência: '.$e->getMessage(), [
                     'exception' => $e,
                 ]);
             }

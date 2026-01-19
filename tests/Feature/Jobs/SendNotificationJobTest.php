@@ -10,9 +10,10 @@ use App\Models\User;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 use Tests\TestCase;
 
 class SendNotificationJobTest extends TestCase
@@ -37,8 +38,9 @@ class SendNotificationJobTest extends TestCase
             'amount' => '100.00',
         ]);
 
-        Log::shouldReceive('info')
-            ->once()
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())
+            ->method('info')
             ->with('Notificação enviada com sucesso', [
                 'transaction_id' => $transaction->id,
             ]);
@@ -46,7 +48,7 @@ class SendNotificationJobTest extends TestCase
         $job = new SendNotificationJob($transaction);
 
         // WHEN
-        $job->handle();
+        $job->handle($logger, $this->app->make(HttpFactory::class));
 
         // THEN
         Http::assertSent(function ($request) {
@@ -73,23 +75,21 @@ class SendNotificationJobTest extends TestCase
             'amount' => '100.00',
         ]);
 
+        $logger = $this->createMock(LoggerInterface::class);
         $job = new SendNotificationJob($transaction);
 
         // EXPECT
         $this->expectException(RequestException::class);
 
         // WHEN
-        $job->handle();
+        $job->handle($logger, $this->app->make(HttpFactory::class));
     }
 
     public function test_should_log_error_when_job_fails(): void
     {
         // GIVEN
-        Log::shouldReceive('error')
-            ->once()
-            ->withArgs(function ($message) {
-                return str_contains($message, 'Notification failed for transaction');
-            });
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->app->instance(LoggerInterface::class, $logger);
 
         $payer = User::factory()->create();
         $payee = User::factory()->create();
@@ -101,6 +101,10 @@ class SendNotificationJobTest extends TestCase
             'payee_wallet_id' => $payeeWallet->id,
             'amount' => '100.00',
         ]);
+
+        $logger->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('Notification failed for transaction'));
 
         $job = new SendNotificationJob($transaction);
 

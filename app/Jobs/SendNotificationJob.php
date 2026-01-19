@@ -8,10 +8,10 @@ use App\Models\Transaction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 class SendNotificationJob implements ShouldQueue
@@ -34,22 +34,22 @@ class SendNotificationJob implements ShouldQueue
         public Transaction $transaction
     ) {}
 
-    public function handle(): void
+    public function handle(LoggerInterface $logger, HttpFactory $http): void
     {
-        $response = Http::timeout(5)->post('https://util.devi.tools/api/v1/notify');
+        $response = $http->timeout(5)->post('https://util.devi.tools/api/v1/notify');
 
         if ($response->failed()) {
             $response->throw();
         }
 
-        Log::info('Notificação enviada com sucesso', [
+        $logger->info('Notificação enviada com sucesso', [
             'transaction_id' => $this->transaction->id,
         ]);
     }
 
     public function failed(Throwable $exception): void
     {
-        Log::error('Notification failed for transaction '.$this->transaction->id, [
+        app(LoggerInterface::class)->error('Notification failed for transaction '.$this->transaction->id, [
             'error' => $exception->getMessage(),
             'transaction' => $this->transaction->toArray(),
         ]);

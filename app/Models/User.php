@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property string $id
+ * @property \App\Enums\UserType $type
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -29,12 +33,6 @@ class User extends Authenticatable
         'type',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-        'type' => UserType::class,
-    ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -48,7 +46,7 @@ class User extends Authenticatable
     /**
      * Get the attributes that should be cast.
      *
-     * @return array<string, string>
+     * @return array<string, string|class-string>
      */
     protected function casts(): array
     {
@@ -58,14 +56,6 @@ class User extends Authenticatable
             'password' => 'hashed',
             'type' => UserType::class,
         ];
-    }
-
-    /**
-     * Set the user's type.
-     */
-    protected function setTypeAttribute(string|UserType $value): void
-    {
-        $this->attributes['type'] = $value instanceof UserType ? $value->value : UserType::from($value)->value;
     }
 
     /**
