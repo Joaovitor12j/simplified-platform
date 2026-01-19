@@ -45,6 +45,6 @@ analyse:
 	@docker compose exec app ./vendor/bin/phpstan analyse --memory-limit=2G
 
 phpmd:
-	@docker run --rm -v $(shell pwd):/project -w /project jakzal/phpqa sh -c "phpmd app text cleancode,codesize,controversial,design,naming,unusedcode | grep -v 'Deprecated'" || true
+	@docker compose exec app php -d error_reporting="E_ALL & ~E_DEPRECATED" ./vendor/bin/phpmd app text phpmd.xml
 
-check: lint analyse test
+check: lint analyse phpmd test

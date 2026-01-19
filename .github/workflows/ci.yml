@@ -62,6 +62,9 @@ jobs:
       - name: Execute Static Analysis
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
 
+      - name: Execute Mess Detector
+        run: php -d error_reporting="E_ALL & ~E_DEPRECATED" ./vendor/bin/phpmd app text phpmd.xml
+
       - name: Execute Tests
         env:
           DB_CONNECTION: pgsql
