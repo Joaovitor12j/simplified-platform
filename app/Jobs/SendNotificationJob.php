@@ -36,7 +36,7 @@ class SendNotificationJob implements ShouldQueue
 
     public function handle(LoggerInterface $logger, HttpFactory $http): void
     {
-        $response = $http->timeout(5)->post('https://util.devi.tools/api/v1/notify');
+        $response = $http->timeout(5)->post(config('services.notification.url'));
 
         if ($response->failed()) {
             $response->throw();

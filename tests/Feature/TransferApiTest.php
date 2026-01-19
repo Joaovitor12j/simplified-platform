@@ -29,7 +29,7 @@ class TransferApiTest extends TestCase
         Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
 
         Http::fake([
-            'https://util.devi.tools/api/v2/authorize' => Http::response([
+            config('services.authorization.url') => Http::response([
                 'status' => 'success',
                 'data' => ['authorization' => true],
             ], 200),
@@ -94,7 +94,7 @@ class TransferApiTest extends TestCase
         $response = $this->postJson('/api/transfer', $payload);
 
         // THEN
-        $response->assertStatus(403);
+        $response->assertStatus(400);
         $response->assertJson([
             'message' => 'Lojistas não podem realizar transferências.',
         ]);
@@ -110,7 +110,7 @@ class TransferApiTest extends TestCase
         Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
 
         Http::fake([
-            'https://util.devi.tools/api/v2/authorize' => Http::response([
+            config('services.authorization.url') => Http::response([
                 'status' => 'success',
                 'data' => ['authorization' => true],
             ], 200),
@@ -126,7 +126,7 @@ class TransferApiTest extends TestCase
         $response = $this->postJson('/api/transfer', $payload);
 
         // THEN
-        $response->assertStatus(400);
+        $response->assertStatus(422);
         $response->assertJson([
             'message' => 'Saldo insuficiente para realizar a transferência.',
         ]);
@@ -142,7 +142,7 @@ class TransferApiTest extends TestCase
         Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
 
         Http::fake([
-            'https://util.devi.tools/api/v2/authorize' => Http::response([], 500),
+            config('services.authorization.url') => Http::response([], 500),
         ]);
 
         $payload = [
@@ -155,7 +155,7 @@ class TransferApiTest extends TestCase
         $response = $this->postJson('/api/transfer', $payload);
 
         // THEN
-        $response->assertStatus(403);
+        $response->assertStatus(502);
         $response->assertJson([
             'message' => 'Serviço de autorização externo indisponível.',
         ]);

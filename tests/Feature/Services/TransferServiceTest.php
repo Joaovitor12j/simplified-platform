@@ -38,13 +38,13 @@ class TransferServiceTest extends TestCase
         Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
 
         Http::fake([
-            'https://util.devi.tools/api/v2/authorize' => Http::response([
+            config('services.authorization.url') => Http::response([
                 'status' => 'success',
                 'data' => [
                     'authorization' => true,
                 ],
             ]),
-            'https://util.devi.tools/api/v1/notify' => Http::response([], 200),
+            config('services.notification.url') => Http::response([], 200),
         ]);
 
         // WHEN
@@ -91,7 +91,7 @@ class TransferServiceTest extends TestCase
         Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
 
         Http::fake([
-            'https://util.devi.tools/api/v2/authorize' => Http::response([
+            config('services.authorization.url') => Http::response([
                 'status' => 'success',
                 'data' => [
                     'authorization' => true,
@@ -114,7 +114,7 @@ class TransferServiceTest extends TestCase
         Wallet::factory()->create(['user_id' => $payer->id, 'balance' => 100.00]);
 
         Http::fake([
-            'https://util.devi.tools/api/v2/authorize' => Http::response([
+            config('services.authorization.url') => Http::response([
                 'status' => 'fail',
                 'data' => [
                     'authorization' => false,
