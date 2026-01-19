@@ -16,7 +16,7 @@ use App\Services\AuthorizationService;
 use App\Services\Contracts\AuthorizationServiceInterface;
 use App\Services\Contracts\TransferServiceInterface;
 use App\Services\TransferService;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -55,9 +55,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(Dispatcher $events): void
     {
-        Event::listen(
+        $events->listen(
             TransactionCompleted::class,
             SendNotificationListener::class
         );

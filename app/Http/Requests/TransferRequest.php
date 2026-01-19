@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\DTOs\TransferDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TransferRequest extends FormRequest
@@ -28,5 +29,16 @@ class TransferRequest extends FormRequest
             'payer' => ['required', 'uuid', 'exists:users,id'],
             'payee' => ['required', 'uuid', 'exists:users,id', 'different:payer'],
         ];
+    }
+
+    public function toDTO(): TransferDTO
+    {
+        $validated = $this->validated();
+
+        return new TransferDTO(
+            payerId: (string) $validated['payer'],
+            payeeId: (string) $validated['payee'],
+            amount: number_format((float) $validated['value'], 2, '.', '')
+        );
     }
 }

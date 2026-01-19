@@ -17,9 +17,10 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\WalletRepositoryInterface;
 use App\Services\Contracts\AuthorizationServiceInterface;
 use App\Services\Contracts\TransferServiceInterface;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 /**
@@ -31,7 +32,10 @@ final readonly class TransferService implements TransferServiceInterface
         private UserRepositoryInterface $users,
         private WalletRepositoryInterface $wallets,
         private TransactionRepositoryInterface $transactions,
-        private AuthorizationServiceInterface $authorizer
+        private AuthorizationServiceInterface $authorizer,
+        private DatabaseManager $databaseManager,
+        private LoggerInterface $logger,
+        private Dispatcher $dispatcher
     ) {}
 
     /**
@@ -57,7 +61,7 @@ final readonly class TransferService implements TransferServiceInterface
         $this->validatePayerType($payer);
         $this->authorizeTransaction();
 
-        $transaction = DB::transaction(function () use ($payerId, $payeeId, $value) {
+        $transaction = $this->databaseManager->transaction(function () use ($payerId, $payeeId, $value) {
             $wallets = $this->wallets->findManyForUpdate([$payerId, $payeeId]);
 
             $payerWallet = $wallets->firstWhere('user_id', $payerId);
@@ -79,9 +83,9 @@ final readonly class TransferService implements TransferServiceInterface
             ]);
         });
 
-        DB::afterCommit(fn () => SendNotificationJob::dispatch($transaction));
+        $this->databaseManager->afterCommit(fn () => $this->dispatcher->dispatch(new SendNotificationJob($transaction)));
 
-        Log::info('Transferência realizada com sucesso', [
+        $this->logger->info('Transferência realizada com sucesso', [
             'id' => $transaction->id,
             'payer' => $payerId,
             'payee' => $payeeId,
