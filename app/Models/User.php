@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\UserType;
+use App\Exceptions\Domain\MerchantPayerException;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -64,5 +65,17 @@ class User extends Authenticatable
     public function wallet(): HasOne
     {
         return $this->hasOne(Wallet::class);
+    }
+
+    /**
+     * Validates if the user can transfer money.
+     *
+     * @throws MerchantPayerException
+     */
+    public function validateCanTransfer(): void
+    {
+        if ($this->type->isShopkeeper()) {
+            throw new MerchantPayerException;
+        }
     }
 }
