@@ -24,7 +24,7 @@ class SendNotificationJobTest extends TestCase
     {
         // GIVEN
         Http::fake([
-            'https://util.devi.tools/api/v1/notify' => Http::response([]),
+            config('services.notification.url') => Http::response([]),
         ]);
 
         $payer = User::factory()->create();
@@ -52,7 +52,7 @@ class SendNotificationJobTest extends TestCase
 
         // THEN
         Http::assertSent(function ($request) {
-            return $request->url() === 'https://util.devi.tools/api/v1/notify' &&
+            return $request->url() === config('services.notification.url') &&
                    $request->method() === 'POST';
         });
     }
@@ -61,7 +61,7 @@ class SendNotificationJobTest extends TestCase
     {
         // GIVEN
         Http::fake([
-            'https://util.devi.tools/api/v1/notify' => Http::response([], 500),
+            config('services.notification.url') => Http::response([], 500),
         ]);
 
         $payer = User::factory()->create();

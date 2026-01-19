@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\Domain\AuthorizationServiceException;
 use App\Exceptions\Domain\UnauthorizedTransactionException;
 use App\Services\Contracts\AuthorizationServiceInterface;
 use Exception;
@@ -21,11 +22,12 @@ final readonly class AuthorizationService implements AuthorizationServiceInterfa
         private LoggerInterface $logger,
         private HttpFactory $http
     ) {
-        $this->url = 'https://util.devi.tools/api/v2/authorize';
+        $this->url = (string) config('services.authorization.url');
     }
 
     /**
      * @throws UnauthorizedTransactionException
+     * @throws AuthorizationServiceException
      */
     public function authorize(): bool
     {
@@ -37,7 +39,7 @@ final readonly class AuthorizationService implements AuthorizationServiceInterfa
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
-                throw new UnauthorizedTransactionException('Serviço de autorização externo indisponível.');
+                throw new AuthorizationServiceException('Serviço de autorização externo indisponível.');
             }
 
             $data = $response->json();
@@ -47,14 +49,14 @@ final readonly class AuthorizationService implements AuthorizationServiceInterfa
             }
 
             return true;
-        } catch (UnauthorizedTransactionException $e) {
+        } catch (UnauthorizedTransactionException|AuthorizationServiceException $e) {
             throw $e;
         } catch (Exception $e) {
             $this->logger->error('Error connecting to external authorization service', [
                 'message' => $e->getMessage(),
             ]);
 
-            throw new UnauthorizedTransactionException('Erro ao conectar ao serviço de autorização externo.');
+            throw new AuthorizationServiceException('Erro ao conectar ao serviço de autorização externo.');
         }
     }
 }

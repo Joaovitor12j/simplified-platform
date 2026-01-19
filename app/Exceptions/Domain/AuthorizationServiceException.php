@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Exceptions\Domain;
+
+use Exception;
+
+class AuthorizationServiceException extends Exception
+{
+    public function __construct(string $message = 'Serviço de autorização externo indisponível.')
+    {
+        parent::__construct($message, 502);
+    }
+}
