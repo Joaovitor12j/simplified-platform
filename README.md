@@ -32,6 +32,8 @@ A arquitetura foi desenhada seguindo os princípios de **Clean Architecture** e 
     - **Transações Atômicas**: Transferências são protegidas por `DB::transaction`, garantindo que a operação seja revertida integralmente em caso de qualquer falha.
     - **Otimização de Performance**: Ambas as carteiras envolvidas na transferência são buscadas em uma **única query** utilizando `whereIn` com `lockForUpdate`, reduzindo a latência e garantindo consistência em cenários concorrentes.
     - **Notificações Resilientes**: O despacho de notificações ocorre apenas após o sucesso do commit da transação (`DB::afterCommit`), evitando envios indevidos em caso de rollback.
+- **Idempotência e Concorrência**:
+    - **Proteção contra Duplicidade**: Implementação de Middleware de Idempotência (`Idempotency-Key`). Utiliza **Atomic Locks** do Redis para garantir que, mesmo se o cliente enviar 10 requisições idênticas simultâneas (double-click ou retry de rede), apenas uma será processada e as outras receberão a resposta cacheada (Replay Attack Protection).
 - **Fail Fast**: Validações robustas via *Form Requests* e exceções de domínio customizadas identificam falhas antes do processamento pesado.
 
 ---
@@ -165,18 +167,14 @@ Os cenários testados incluem:
 
 Visando a evolução do projeto para um cenário de alta volumetria e produção (Go-to-Market), sugiro os seguintes passos:
 
-1.  **Idempotência em Transações**:
-    -   **Cenário**: Evitar duplicidade de transferências em casos de instabilidade de rede (retries do cliente).
-    -   **Solução**: Implementar middleware que valida o header `x-idempotency-key` via Redis antes de processar o débito.
-
-2.  **Observabilidade (Tracing Distribuído)**:
+1.  **Observabilidade (Tracing Distribuído)**:
     -   **Cenário**: Dificuldade de rastrear falhas em processos assíncronos (Fila/Worker).
     -   **Solução**: Integrar OpenTelemetry para monitorar o trace da requisição desde a API até o consumo do Job pelo Worker.
 
-3.  **Segurança (Autenticação)**:
+2. **Segurança (Autenticação)**:
     -   **Solução**: Implementar autenticação JWT (OAuth2) via Keycloak ou Laravel Passport, garantindo que apenas o dono da carteira autorize o débito.
 
-4.  **Auditoria (Ledger)**:
+3. **Auditoria (Ledger)**:
     -   **Solução**: Implementar uma tabela de *Ledger* (Livro-Razão) imutável (Append-Only) para registrar o histórico de movimentações, facilitando a conciliação financeira e auditoria.
 
 ---
