@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Services;
 
-use App\DTOs\TransferDTO;
+use App\Core\Application\DTOs\TransferDTO;
 use App\Enums\UserType;
 use App\Exceptions\Domain\InsufficientBalanceException;
 use App\Exceptions\Domain\MerchantPayerException;
 use App\Exceptions\Domain\UnauthorizedTransactionException;
-use App\Models\User;
-use App\Models\Wallet;
-use App\Services\Contracts\TransferServiceInterface;
+use App\Infrastructure\Persistence\Eloquent\Models\User;
+use App\Infrastructure\Persistence\Eloquent\Models\Wallet;
+use App\Core\Application\UseCases\TransferServiceInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -112,6 +112,7 @@ class TransferServiceTest extends TestCase
         $payee = User::factory()->create(['type' => UserType::SHOPKEEPER]);
 
         Wallet::factory()->create(['user_id' => $payer->id, 'balance' => 100.00]);
+        Wallet::factory()->create(['user_id' => $payee->id, 'balance' => 0.00]);
 
         Http::fake([
             config('services.authorization.url') => Http::response([

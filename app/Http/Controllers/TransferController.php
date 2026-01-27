@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransferRequest;
-use App\Services\Contracts\TransferServiceInterface;
+use App\Core\Application\UseCases\TransferServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

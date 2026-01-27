@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Feature\Jobs;
 
 use App\Jobs\SendNotificationJob;
-use App\Models\Transaction;
-use App\Models\User;
-use App\Models\Wallet;
+use App\Infrastructure\Persistence\Eloquent\Models\Transaction;
+use App\Infrastructure\Persistence\Eloquent\Models\User;
+use App\Infrastructure\Persistence\Eloquent\Models\Wallet;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Factory as HttpFactory;

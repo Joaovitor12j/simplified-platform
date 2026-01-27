@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Infrastructure\Persistence\Eloquent\Models;
 
 use App\Enums\UserType;
 use App\Exceptions\Domain\MerchantPayerException;
@@ -20,6 +20,11 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasUuids, Notifiable;
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\UserFactory::new();
+    }
 
     /**
      * The attributes that are mass assignable.

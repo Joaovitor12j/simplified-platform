@@ -7,10 +7,10 @@ namespace App\Providers;
 use App\Events\TransactionCompleted;
 use App\Listeners\LogTransactionListener;
 use App\Listeners\SendNotificationListener;
-use App\Services\AuthorizationService;
-use App\Services\Contracts\AuthorizationServiceInterface;
-use App\Services\Contracts\TransferServiceInterface;
-use App\Services\TransferService;
+use App\Infrastructure\ExternalServices\AuthorizationService;
+use App\Core\Domain\Repositories\AuthorizationServiceInterface;
+use App\Core\Application\UseCases\TransferServiceInterface;
+use App\Core\Application\UseCases\TransferService;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 

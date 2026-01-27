@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\Eloquent;
+namespace App\Infrastructure\Persistence\Eloquent\Repositories;
 
-use App\Models\Transaction;
-use App\Repositories\Contracts\TransactionRepositoryInterface;
+use App\Infrastructure\Persistence\Eloquent\Models\Transaction;
+use App\Core\Domain\Repositories\TransactionRepositoryInterface;
 
 final readonly class EloquentTransactionRepository implements TransactionRepositoryInterface
 {

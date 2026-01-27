@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\Contracts;
+namespace App\Core\Domain\Repositories;
 
-use App\Models\Transaction;
+use App\Infrastructure\Persistence\Eloquent\Models\Transaction;
 
 interface TransactionRepositoryInterface
 {

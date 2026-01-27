@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Contracts;
+namespace App\Core\Application\UseCases;
 
-use App\DTOs\TransferDTO;
-use App\Models\Transaction;
+use App\Core\Application\DTOs\TransferDTO;
+use App\Infrastructure\Persistence\Eloquent\Models\Transaction;
 
 interface TransferServiceInterface
 {

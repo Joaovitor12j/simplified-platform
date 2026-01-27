@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Events;
 
-use App\Models\Transaction;
+use App\Infrastructure\Persistence\Eloquent\Models\Transaction;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 

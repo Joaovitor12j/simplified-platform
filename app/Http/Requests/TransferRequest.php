@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\DTOs\TransferDTO;
+use App\Core\Application\DTOs\TransferDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TransferRequest extends FormRequest

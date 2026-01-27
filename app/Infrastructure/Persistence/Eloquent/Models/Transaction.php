@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Infrastructure\Persistence\Eloquent\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,10 +13,17 @@ class Transaction extends Model
 {
     use HasFactory, HasUuids;
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\TransactionFactory::new();
+    }
+
     protected $fillable = [
         'payer_wallet_id',
         'payee_wallet_id',
         'amount',
+        'status',
+        'failure_reason',
     ];
 
     protected $casts = [

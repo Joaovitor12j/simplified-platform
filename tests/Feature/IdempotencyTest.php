@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Enums\UserType;
-use App\Models\User;
-use App\Models\Wallet;
+use App\Infrastructure\Persistence\Eloquent\Models\User;
+use App\Infrastructure\Persistence\Eloquent\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;

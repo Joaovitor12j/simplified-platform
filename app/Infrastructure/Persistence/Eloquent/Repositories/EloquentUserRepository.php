@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\Eloquent;
+namespace App\Infrastructure\Persistence\Eloquent\Repositories;
 
-use App\Models\User;
-use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Infrastructure\Persistence\Eloquent\Models\User;
+use App\Core\Domain\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Collection;
 
 final readonly class EloquentUserRepository implements UserRepositoryInterface

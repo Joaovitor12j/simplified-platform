@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\Eloquent;
+namespace App\Infrastructure\Persistence\Eloquent\Repositories;
 
-use App\Models\Wallet;
-use App\Repositories\Contracts\WalletRepositoryInterface;
+use App\Core\Domain\ValueObjects\Money;
+use App\Infrastructure\Persistence\Eloquent\Models\Wallet;
+use App\Core\Domain\Repositories\WalletRepositoryInterface;
 use Illuminate\Support\Collection;
 
 final readonly class EloquentWalletRepository implements WalletRepositoryInterface
@@ -14,11 +15,20 @@ final readonly class EloquentWalletRepository implements WalletRepositoryInterfa
         private Wallet $model
     ) {}
 
-    public function updateBalance(string $walletId, string $amount): void
+    public function debit(string $walletId, Money $amount): void
     {
-        $wallet = $this->model->lockForUpdate()->findOrFail($walletId);
-        $newBalance = bcadd((string) $wallet->balance, $amount, 2);
-        $wallet->update(['balance' => $newBalance]);
+        $wallet = $this->model->findOrFail($walletId);
+        $currentBalance = new Money($wallet->balance);
+        $newBalance = $currentBalance->subtract($amount);
+        $wallet->update(['balance' => $newBalance->getAmount()]);
+    }
+
+    public function credit(string $walletId, Money $amount): void
+    {
+        $wallet = $this->model->findOrFail($walletId);
+        $currentBalance = new Money($wallet->balance);
+        $newBalance = $currentBalance->add($amount);
+        $wallet->update(['balance' => $newBalance->getAmount()]);
     }
 
     public function findByUserId(string $userId): ?Wallet

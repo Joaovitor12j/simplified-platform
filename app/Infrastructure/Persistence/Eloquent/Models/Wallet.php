@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Infrastructure\Persistence\Eloquent\Models;
 
 use App\Exceptions\Domain\InsufficientBalanceException;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -11,9 +11,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property string $id
+ * @property string $user_id
+ * @property string $balance
+ * @property \App\Infrastructure\Persistence\Eloquent\Models\User $user
+ */
 class Wallet extends Model
 {
     use HasFactory, HasUuids;
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\WalletFactory::new();
+    }
 
     protected $fillable = [
         'user_id',

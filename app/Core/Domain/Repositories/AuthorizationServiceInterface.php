@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Contracts;
+namespace App\Core\Domain\Repositories;
 
 interface AuthorizationServiceInterface
 {

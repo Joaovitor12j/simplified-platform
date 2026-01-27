@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\Contracts;
+namespace App\Core\Domain\Repositories;
 
 use Illuminate\Support\Collection;
 

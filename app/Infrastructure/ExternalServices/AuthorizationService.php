@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Infrastructure\ExternalServices;
 
 use App\Exceptions\Domain\AuthorizationServiceException;
 use App\Exceptions\Domain\UnauthorizedTransactionException;
-use App\Services\Contracts\AuthorizationServiceInterface;
+use App\Core\Domain\Repositories\AuthorizationServiceInterface;
 use Exception;
 use Illuminate\Http\Client\Factory as HttpFactory;
 use Psr\Log\LoggerInterface;

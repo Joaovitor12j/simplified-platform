@@ -6,8 +6,8 @@ namespace Tests\Feature;
 
 use App\Enums\UserType;
 use App\Jobs\SendNotificationJob;
-use App\Models\User;
-use App\Models\Wallet;
+use App\Infrastructure\Persistence\Eloquent\Models\User;
+use App\Infrastructure\Persistence\Eloquent\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;

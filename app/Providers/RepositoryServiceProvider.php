@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Repositories\Contracts\TransactionRepositoryInterface;
-use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Repositories\Contracts\WalletRepositoryInterface;
-use App\Repositories\Eloquent\EloquentTransactionRepository;
-use App\Repositories\Eloquent\EloquentUserRepository;
-use App\Repositories\Eloquent\EloquentWalletRepository;
+use App\Core\Domain\Repositories\TransactionRepositoryInterface;
+use App\Core\Domain\Repositories\UserRepositoryInterface;
+use App\Core\Domain\Repositories\WalletRepositoryInterface;
+use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentTransactionRepository;
+use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentUserRepository;
+use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentWalletRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
